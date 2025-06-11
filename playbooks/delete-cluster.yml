@@ -1,0 +1,13 @@
+# project-2/playbooks/delete-cluster.yml
+- name: Delete Kubernetes Cluster
+  hosts: localhost
+  become: no
+  vars:
+    cluster_name: "prod.k8s.mjatto.com"
+    state_store: "s3://mjatto-kops-state"
+  tasks:
+    - name: Delete Kops Cluster
+      shell: |
+        export KOPS_CLUSTER_NAME={{ cluster_name }}
+        export KOPS_STATE_STORE={{ state_store }}
+        kops delete cluster --name=${KOPS_CLUSTER_NAME} --state=${KOPS_STATE_STORE} --yes
